@@ -1,0 +1,10 @@
+{
+    "testExecution": {
+          "testEnvironmentProvisioningExecution": {
+              "testEnvironmentAllocationExecution": {
+                  "resourceManagerUrl": "http://example.com/resourceManager"
+              }
+          }
+      },
+    "testSuiteResultDefinition": {}
+  }

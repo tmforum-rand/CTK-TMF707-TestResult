@@ -1,0 +1,40 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "testExecution": {
+            "type": "object",
+            "properties": {
+                "testEnvironmentProvisioningExecution": {
+                    "type": "object",
+                    "properties": {
+                        "testEnvironmentAllocationExecution": {
+                            "type": "object",
+                            "properties": {
+                                "resourceManagerUrl": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "resourceManagerUrl"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "testEnvironmentAllocationExecution"
+                    ]
+                }
+            },
+            "required": [
+                "testEnvironmentProvisioningExecution"
+            ]
+        },
+        "testSuiteResultDefinition": {
+            "type": "object"
+        }
+    },
+    "required": [
+        "testExecution",
+        "testSuiteResultDefinition"
+    ]
+}

@@ -1,0 +1,10 @@
+{
+    "nonFunctionalTestResultDefinition": {},
+    "testExecution": {
+      "testEnvironmentProvisioningExecution": {
+        "testEnvironmentAllocationExecution": {
+          "resourceManagerUrl": "https://myserver.com/resourceManager"
+        }
+      }
+    }
+  }

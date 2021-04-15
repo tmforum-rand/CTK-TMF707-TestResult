@@ -1,0 +1,52 @@
+{
+    "url": " http://localhost:8707/tmf-api/testResult/v4/",
+    "resourcesToTest": "NonFunctionalTestResult",
+    "headers": {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+    },
+    "payloads": {
+        "TestCaseResult": {
+            "POST": {
+                "payload": {
+                    "testCaseResultDefinition": {},
+                    "testExecution": {
+                        "testEnvironmentProvisioningExecution": {
+                            "testEnvironmentAllocationExecution": {
+                                "resourceManagerUrl": "http://example.com/resourceManager"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "TestSuiteResult": {
+            "POST": {
+                "payload": {
+                    "testExecution": {
+                          "testEnvironmentProvisioningExecution": {
+                              "testEnvironmentAllocationExecution": {
+                                  "resourceManagerUrl": "http://example.com/resourceManager"
+                              }
+                          }
+                      },
+                    "testSuiteResultDefinition": {}
+                  }
+            }
+        },
+        "NonFunctionalTestResult": {
+            "POST": {
+                "payload": {
+                    "nonFunctionalTestResultDefinition": {},
+                    "testExecution": {
+                      "testEnvironmentProvisioningExecution": {
+                        "testEnvironmentAllocationExecution": {
+                          "resourceManagerUrl": "https://myserver.com/resourceManager"
+                        }
+                      }
+                    }
+                  }
+            }
+        }
+    }
+}

@@ -1,0 +1,1592 @@
+{
+    "info": {
+        "_postman_id": "8fe03246-67e9-42c4-8c2b-3729d2b029cc",
+        "name": "CTK-Test_Result-4.0.0",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "N0",
+            "item": [
+                {
+                    "name": "Start",
+                    "event": [
+                        {
+                            "listen": "prerequest",
+                            "script": {
+                                "exec": [
+                                    "resourceToTest = pm.environment.get(\"resourceToTest\");",
+                                    "",
+                                    "if (resourceToTest.toLowerCase() == \"testcaseresult\"){",
+                                    "    postman.setNextRequest(\"Post TestCaseResult\")",
+                                    "}",
+                                    "",
+                                    "if (resourceToTest.toLowerCase() == \"testsuiteresult\"){",
+                                    "    postman.setNextRequest(\"Post TestSuiteResult\")",
+                                    "}",
+                                    "if (resourceToTest.toLowerCase() == \"nonfunctionaltestresult\"){",
+                                    "    postman.setNextRequest(\"Post NonFunctionalTestResult\")",
+                                    "}",
+                                    ""
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "www.example.com",
+                            "host": [
+                                "www",
+                                "example",
+                                "com"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "N1",
+            "item": [
+                {
+                    "name": "Post TestCaseResult",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "",
+                                    "if (Array.isArray(jsonData)) { ",
+                                    "  ",
+                                    "    pm.test('Array not expected as response', function (){pm.expect.fail()});",
+                                    "  ",
+                                    "",
+                                    "}",
+                                    "",
+                                    "pm.test(\"Status code is 201\", function () {",
+                                    "  pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "var instance = pm.response.json();",
+                                    "var requiredAttributes = ['testCaseResultDefinition', 'testExecution', 'href', 'id', 'testCaseResultDefinition', 'testExecution'];",
+                                    "",
+                                    "pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "",
+                                    "",
+                                    "",
+                                    "pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "",
+                                    "pm.globals.set('HREFTCR01', instance['href']);",
+                                    "pm.globals.set('IDTCR01', instance['id']);",
+                                    "",
+                                    "pm.test('Body includes value held on href', function () {",
+                                    "  pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "});",
+                                    "pm.test('Body includes value held on id', function () {",
+                                    "  pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "});",
+                                    ""
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"testCaseResultDefinition\": {},\n  \"testExecution\": {}\n}"
+                        },
+                        "url": {
+                            "raw": "{{Test_Result}}testCaseResult",
+                            "host": [
+                                "{{Test_Result}}testCaseResult"
+                            ]
+                        },
+                        "description": "This operation creates a TestCaseResult"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "/TestCaseResult",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "  ",
+                                    "  ",
+                                    "  ",
+                                    "var jsonData = pm.response.json();",
+                                    "  ",
+                                    "if (Array.isArray(jsonData) && (jsonData.length > 0)) {",
+                                    "    jsonData.forEach(function (instance, index) {",
+                                    "      ",
+                                    "        var requiredAttributes = ['testCaseResultDefinition', 'testExecution', 'href', 'id', 'testCaseResultDefinition', 'testExecution'];",
+                                    "      ",
+                                    "        pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "      ",
+                                    "      ",
+                                    "      ",
+                                    "        pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "        pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "      ",
+                                    "        pm.test('Body includes value held on href', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "        });",
+                                    "        pm.test('Body includes value held on id', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "        });",
+                                    "        // Individualized tests",
+                                    "        if (instance.id == pm.globals.get(\"IDTCR01\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFTCR01\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFTCR01');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDTCR01\"), function() {pm.expect(instance['id']) == pm.globals.get('IDTCR01');});",
+                                    "        }",
+                                    "        if (instance.id == pm.globals.get(\"IDTCR02\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFTCR02\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFTCR02');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDTCR02\"), function() {pm.expect(instance['id']) == pm.globals.get('IDTCR02');});",
+                                    "        }  ",
+                                    "    });",
+                                    "  }",
+                                    "  else {",
+                                    "    var instance = pm.response.json();",
+                                    "    var requiredAttributes = ['testCaseResultDefinition', 'testExecution', 'href', 'id', 'testCaseResultDefinition', 'testExecution'];",
+                                    "      ",
+                                    "        pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "      ",
+                                    "      ",
+                                    "      ",
+                                    "        pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "        pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "      ",
+                                    "        pm.test('Body includes value held on href', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "        });",
+                                    "        pm.test('Body includes value held on id', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "        });",
+                                    "        // Individualized tests",
+                                    "        if (instance.id == pm.globals.get(\"IDTCR01\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFTCR01\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFTCR01');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDTCR01\"), function() {pm.expect(instance['id']) == pm.globals.get('IDTCR01');});",
+                                    "        }",
+                                    "        if (instance.id == pm.globals.get(\"IDTCR02\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFTCR02\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFTCR02');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDTCR02\"), function() {pm.expect(instance['id']) == pm.globals.get('IDTCR02');});",
+                                    "        }",
+                                    "   ",
+                                    "  }",
+                                    "  ",
+                                    "  "
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{Test_Result}}testCaseResult",
+                            "host": [
+                                "{{Test_Result}}testCaseResult"
+                            ]
+                        },
+                        "description": "This operation search for the created TestCaseResult"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "/TestCaseResult/{{IDTCR01}}",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "  ",
+                                    "  ",
+                                    "  ",
+                                    "var jsonData = pm.response.json();",
+                                    "  ",
+                                    "if (Array.isArray(jsonData) && (jsonData.length > 0)) {",
+                                    "    jsonData.forEach(function (instance, index) {",
+                                    "      ",
+                                    "        var requiredAttributes = ['testCaseResultDefinition', 'testExecution', 'href', 'id', 'testCaseResultDefinition', 'testExecution'];",
+                                    "      ",
+                                    "        pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "      ",
+                                    "      ",
+                                    "      ",
+                                    "        pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "        pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "      ",
+                                    "        pm.test('Body includes value held on href', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "        });",
+                                    "        pm.test('Body includes value held on id', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "        });",
+                                    "        // Individualized tests",
+                                    "        if (instance.id == pm.globals.get(\"IDTCR01\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFTCR01\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFTCR01');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDTCR01\"), function() {pm.expect(instance['id']) == pm.globals.get('IDTCR01');});",
+                                    "        }",
+                                    "        if (instance.id == pm.globals.get(\"IDTCR02\")) {",
+                                    "            pm.test('IDTCR02 not expected on this test', function () {",
+                                    "                console.log(\"Non expected resource, may happen if there is a collision on attributes\")",
+                                    "            });",
+                                    "        }",
+                                    "          ",
+                                    "    });",
+                                    "  }",
+                                    "  else {",
+                                    "    var instance = pm.response.json();",
+                                    "    var requiredAttributes = ['testCaseResultDefinition', 'testExecution', 'href', 'id', 'testCaseResultDefinition', 'testExecution'];",
+                                    "      ",
+                                    "        pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "      ",
+                                    "      ",
+                                    "      ",
+                                    "        pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "        pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "      ",
+                                    "        pm.test('Body includes value held on href', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "        });",
+                                    "        pm.test('Body includes value held on id', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "        });",
+                                    "        // Individualized tests",
+                                    "        if (instance.id == pm.globals.get(\"IDTCR01\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFTCR01\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFTCR01');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDTCR01\"), function() {pm.expect(instance['id']) == pm.globals.get('IDTCR01');});",
+                                    "        }",
+                                    "        if (instance.id == pm.globals.get(\"IDTCR02\")) {",
+                                    "            pm.test('IDTCR02 not expected on this test', function () {",
+                                    "                console.log(\"Non expected resource, may happen if there is a collision on attributes\")",
+                                    "            });",
+                                    "        }",
+                                    "",
+                                    "        ",
+                                    "   ",
+                                    "}",
+                                    "  ",
+                                    "  "
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{Test_Result}}testCaseResult/{{IDTCR01}}",
+                            "host": [
+                                "{{Test_Result}}testCaseResult"
+                            ],
+                            "path": [
+                                "{{IDTCR01}}"
+                            ]
+                        },
+                        "description": "This operation search for one of the created TestCaseResult"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "N2",
+            "item": [
+                {
+                    "name": "/TestCaseResult?fields=id",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "var jsonData = pm.response.json();",
+                                    "  ",
+                                    "if (Array.isArray(jsonData) && (jsonData.length > 0)) {",
+                                    "    jsonData.forEach(function (instance, index) {",
+                                    "      ",
+                                    "        var requiredAttributes = ['id','href', 'id'];",
+                                    "      ",
+                                    "        pm.test('Instance must have id, href and filtered attribute', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes)});",
+                                    "        pm.test('Instance has only id, href and filtered attribute', function () { pm.expect(requiredAttributes).to.include.members(Object.keys(instance))});",
+                                    "    });",
+                                    "",
+                                    "    ",
+                                    "}",
+                                    "else { ",
+                                    "  ",
+                                    "    pm.test('Array expected as response', function (){pm.expect.fail()});",
+                                    "  ",
+                                    "",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{Test_Result}}testCaseResult?fields=id",
+                            "host": [
+                                "{{Test_Result}}testCaseResult"
+                            ],
+                            "query": [
+                                {
+                                    "key": "fields",
+                                    "value": "id"
+                                }
+                            ]
+                        },
+                        "description": "This operation filter a TestCaseResult"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "/TestCaseResult?id={{IDTCR01}}",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "  ",
+                                    "  ",
+                                    "  ",
+                                    "var jsonData = pm.response.json();",
+                                    "  ",
+                                    "if (Array.isArray(jsonData) && (jsonData.length > 0)) {",
+                                    "    jsonData.forEach(function (instance, index) {",
+                                    "      ",
+                                    "        var requiredAttributes = ['testCaseResultDefinition', 'testExecution', 'href', 'id', 'testCaseResultDefinition', 'testExecution'];",
+                                    "      ",
+                                    "        pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "      ",
+                                    "      ",
+                                    "      ",
+                                    "        pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "        pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "      ",
+                                    "        pm.test('Body includes value held on href', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "        });",
+                                    "        pm.test('Body includes value held on id', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "        });",
+                                    "        // Individualized tests",
+                                    "        if (instance.id == pm.globals.get(\"IDTCR01\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFTCR01\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFTCR01');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDTCR01\"), function() {pm.expect(instance['id']) == pm.globals.get('IDTCR01');});",
+                                    "        }",
+                                    "        if (instance.id == pm.globals.get(\"IDTCR02\")) {",
+                                    "            pm.test('IDTCR02 not expected on this test', function () {",
+                                    "                console.log(\"Non expected resource, may happen if there is a collision on attributes\")",
+                                    "            });",
+                                    "        }",
+                                    "          ",
+                                    "    });",
+                                    "  }",
+                                    "  else {",
+                                    "    var instance = pm.response.json();",
+                                    "    var requiredAttributes = ['testCaseResultDefinition', 'testExecution', 'href', 'id', 'testCaseResultDefinition', 'testExecution'];",
+                                    "      ",
+                                    "        pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "      ",
+                                    "      ",
+                                    "      ",
+                                    "        pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "        pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "      ",
+                                    "        pm.test('Body includes value held on href', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "        });",
+                                    "        pm.test('Body includes value held on id', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "        });",
+                                    "        // Individualized tests",
+                                    "        if (instance.id == pm.globals.get(\"IDTCR01\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFTCR01\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFTCR01');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDTCR01\"), function() {pm.expect(instance['id']) == pm.globals.get('IDTCR01');});",
+                                    "        }",
+                                    "        if (instance.id == pm.globals.get(\"IDTCR02\")) {",
+                                    "            pm.test('IDTCR02 not expected on this test', function () {",
+                                    "                console.log(\"Non expected resource, may happen if there is a collision on attributes\")",
+                                    "            });",
+                                    "        }",
+                                    "",
+                                    "        ",
+                                    "   ",
+                                    "}",
+                                    "  ",
+                                    "  "
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{Test_Result}}testCaseResult?id={{IDTCR01}}",
+                            "host": [
+                                "{{Test_Result}}testCaseResult"
+                            ],
+                            "query": [
+                                {
+                                    "key": "id",
+                                    "value": "{{IDTCR01}}"
+                                }
+                            ]
+                        },
+                        "description": "This operation filter a TestCaseResult"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "E1",
+            "item": [
+                {
+                    "name": "/TestCaseResult/404ID",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 404\", function () {",
+                                    "    pm.response.to.have.status(404);",
+                                    "});",
+                                    "",
+                                    "",
+                                    "postman.setNextRequest(\"End\");"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{Test_Result}}TestCaseResult/4ab0426d-5eff-43c6-bd8a-90abd1b4b1e4",
+                            "host": [
+                                "{{Test_Result}}TestCaseResult"
+                            ],
+                            "path": [
+                                "4ab0426d-5eff-43c6-bd8a-90abd1b4b1e4"
+                            ]
+                        },
+                        "description": "This operation search for one of the created TestCaseResult"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "N1",
+            "item": [
+                {
+                    "name": "Post TestSuiteResult",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "",
+                                    "if (Array.isArray(jsonData)) { ",
+                                    "  ",
+                                    "    pm.test('Array not expected as response', function (){pm.expect.fail()});",
+                                    "  ",
+                                    "",
+                                    "}",
+                                    "",
+                                    "pm.test(\"Status code is 201\", function () {",
+                                    "  pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "var instance = pm.response.json();",
+                                    "var requiredAttributes = ['testExecution', 'testSuiteResultDefinition', 'href', 'id', 'testExecution', 'testSuiteResultDefinition'];",
+                                    "",
+                                    "pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "",
+                                    "",
+                                    "",
+                                    "pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "",
+                                    "pm.globals.set('HREFTSR01', instance['href']);",
+                                    "pm.globals.set('IDTSR01', instance['id']);",
+                                    "",
+                                    "pm.test('Body includes value held on href', function () {",
+                                    "  pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "});",
+                                    "pm.test('Body includes value held on id', function () {",
+                                    "  pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "});",
+                                    ""
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"testExecution\": {},\n  \"testSuiteResultDefinition\": {}\n}"
+                        },
+                        "url": {
+                            "raw": "{{Test_Result}}testSuiteResult",
+                            "host": [
+                                "{{Test_Result}}testSuiteResult"
+                            ]
+                        },
+                        "description": "This operation creates a TestSuiteResult"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "/TestSuiteResult",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "  ",
+                                    "  ",
+                                    "  ",
+                                    "var jsonData = pm.response.json();",
+                                    "  ",
+                                    "if (Array.isArray(jsonData) && (jsonData.length > 0)) {",
+                                    "    jsonData.forEach(function (instance, index) {",
+                                    "      ",
+                                    "        var requiredAttributes = ['testExecution', 'testSuiteResultDefinition', 'href', 'id', 'testExecution', 'testSuiteResultDefinition'];",
+                                    "      ",
+                                    "        pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "      ",
+                                    "      ",
+                                    "      ",
+                                    "        pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "        pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "      ",
+                                    "        pm.test('Body includes value held on href', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "        });",
+                                    "        pm.test('Body includes value held on id', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "        });",
+                                    "        // Individualized tests",
+                                    "        if (instance.id == pm.globals.get(\"IDTSR01\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFTSR01\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFTSR01');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDTSR01\"), function() {pm.expect(instance['id']) == pm.globals.get('IDTSR01');});",
+                                    "        }",
+                                    "        if (instance.id == pm.globals.get(\"IDTSR02\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFTSR02\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFTSR02');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDTSR02\"), function() {pm.expect(instance['id']) == pm.globals.get('IDTSR02');});",
+                                    "        }  ",
+                                    "    });",
+                                    "  }",
+                                    "  else {",
+                                    "    var instance = pm.response.json();",
+                                    "    var requiredAttributes = ['testExecution', 'testSuiteResultDefinition', 'href', 'id', 'testExecution', 'testSuiteResultDefinition'];",
+                                    "      ",
+                                    "        pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "      ",
+                                    "      ",
+                                    "      ",
+                                    "        pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "        pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "      ",
+                                    "        pm.test('Body includes value held on href', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "        });",
+                                    "        pm.test('Body includes value held on id', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "        });",
+                                    "        // Individualized tests",
+                                    "        if (instance.id == pm.globals.get(\"IDTSR01\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFTSR01\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFTSR01');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDTSR01\"), function() {pm.expect(instance['id']) == pm.globals.get('IDTSR01');});",
+                                    "        }",
+                                    "        if (instance.id == pm.globals.get(\"IDTSR02\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFTSR02\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFTSR02');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDTSR02\"), function() {pm.expect(instance['id']) == pm.globals.get('IDTSR02');});",
+                                    "        }",
+                                    "   ",
+                                    "  }",
+                                    "  ",
+                                    "  "
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{Test_Result}}testSuiteResult",
+                            "host": [
+                                "{{Test_Result}}testSuiteResult"
+                            ]
+                        },
+                        "description": "This operation search for the created TestSuiteResult"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "/TestSuiteResult/{{IDTSR01}}",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "  ",
+                                    "  ",
+                                    "  ",
+                                    "var jsonData = pm.response.json();",
+                                    "  ",
+                                    "if (Array.isArray(jsonData) && (jsonData.length > 0)) {",
+                                    "    jsonData.forEach(function (instance, index) {",
+                                    "      ",
+                                    "        var requiredAttributes = ['testExecution', 'testSuiteResultDefinition', 'href', 'id', 'testExecution', 'testSuiteResultDefinition'];",
+                                    "      ",
+                                    "        pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "      ",
+                                    "      ",
+                                    "      ",
+                                    "        pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "        pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "      ",
+                                    "        pm.test('Body includes value held on href', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "        });",
+                                    "        pm.test('Body includes value held on id', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "        });",
+                                    "        // Individualized tests",
+                                    "        if (instance.id == pm.globals.get(\"IDTSR01\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFTSR01\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFTSR01');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDTSR01\"), function() {pm.expect(instance['id']) == pm.globals.get('IDTSR01');});",
+                                    "        }",
+                                    "        if (instance.id == pm.globals.get(\"IDTSR02\")) {",
+                                    "            pm.test('IDTSR02 not expected on this test', function () {",
+                                    "                console.log(\"Non expected resource, may happen if there is a collision on attributes\")",
+                                    "            });",
+                                    "        }",
+                                    "          ",
+                                    "    });",
+                                    "  }",
+                                    "  else {",
+                                    "    var instance = pm.response.json();",
+                                    "    var requiredAttributes = ['testExecution', 'testSuiteResultDefinition', 'href', 'id', 'testExecution', 'testSuiteResultDefinition'];",
+                                    "      ",
+                                    "        pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "      ",
+                                    "      ",
+                                    "      ",
+                                    "        pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "        pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "      ",
+                                    "        pm.test('Body includes value held on href', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "        });",
+                                    "        pm.test('Body includes value held on id', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "        });",
+                                    "        // Individualized tests",
+                                    "        if (instance.id == pm.globals.get(\"IDTSR01\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFTSR01\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFTSR01');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDTSR01\"), function() {pm.expect(instance['id']) == pm.globals.get('IDTSR01');});",
+                                    "        }",
+                                    "        if (instance.id == pm.globals.get(\"IDTSR02\")) {",
+                                    "            pm.test('IDTSR02 not expected on this test', function () {",
+                                    "                console.log(\"Non expected resource, may happen if there is a collision on attributes\")",
+                                    "            });",
+                                    "        }",
+                                    "",
+                                    "        ",
+                                    "   ",
+                                    "}",
+                                    "  ",
+                                    "  "
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{Test_Result}}testSuiteResult/{{IDTSR01}}",
+                            "host": [
+                                "{{Test_Result}}testSuiteResult"
+                            ],
+                            "path": [
+                                "{{IDTSR01}}"
+                            ]
+                        },
+                        "description": "This operation search for one of the created TestSuiteResult"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "N2",
+            "item": [
+                {
+                    "name": "/TestSuiteResult?fields=id",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "var jsonData = pm.response.json();",
+                                    "  ",
+                                    "if (Array.isArray(jsonData) && (jsonData.length > 0)) {",
+                                    "    jsonData.forEach(function (instance, index) {",
+                                    "      ",
+                                    "        var requiredAttributes = ['id','href', 'id'];",
+                                    "      ",
+                                    "        pm.test('Instance must have id, href and filtered attribute', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes)});",
+                                    "        pm.test('Instance has only id, href and filtered attribute', function () { pm.expect(requiredAttributes).to.include.members(Object.keys(instance))});",
+                                    "    });",
+                                    "",
+                                    "    ",
+                                    "}",
+                                    "else { ",
+                                    "  ",
+                                    "    pm.test('Array expected as response', function (){pm.expect.fail()});",
+                                    "  ",
+                                    "",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{Test_Result}}testSuiteResult?fields=id",
+                            "host": [
+                                "{{Test_Result}}testSuiteResult"
+                            ],
+                            "query": [
+                                {
+                                    "key": "fields",
+                                    "value": "id"
+                                }
+                            ]
+                        },
+                        "description": "This operation filter a TestSuiteResult"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "/TestSuiteResult?id={{IDTSR01}}",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "  ",
+                                    "  ",
+                                    "  ",
+                                    "var jsonData = pm.response.json();",
+                                    "  ",
+                                    "if (Array.isArray(jsonData) && (jsonData.length > 0)) {",
+                                    "    jsonData.forEach(function (instance, index) {",
+                                    "      ",
+                                    "        var requiredAttributes = ['testExecution', 'testSuiteResultDefinition', 'href', 'id', 'testExecution', 'testSuiteResultDefinition'];",
+                                    "      ",
+                                    "        pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "      ",
+                                    "      ",
+                                    "      ",
+                                    "        pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "        pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "      ",
+                                    "        pm.test('Body includes value held on href', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "        });",
+                                    "        pm.test('Body includes value held on id', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "        });",
+                                    "        // Individualized tests",
+                                    "        if (instance.id == pm.globals.get(\"IDTSR01\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFTSR01\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFTSR01');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDTSR01\"), function() {pm.expect(instance['id']) == pm.globals.get('IDTSR01');});",
+                                    "        }",
+                                    "        if (instance.id == pm.globals.get(\"IDTSR02\")) {",
+                                    "            pm.test('IDTSR02 not expected on this test', function () {",
+                                    "                console.log(\"Non expected resource, may happen if there is a collision on attributes\")",
+                                    "            });",
+                                    "        }",
+                                    "          ",
+                                    "    });",
+                                    "  }",
+                                    "  else {",
+                                    "    var instance = pm.response.json();",
+                                    "    var requiredAttributes = ['testExecution', 'testSuiteResultDefinition', 'href', 'id', 'testExecution', 'testSuiteResultDefinition'];",
+                                    "      ",
+                                    "        pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "      ",
+                                    "      ",
+                                    "      ",
+                                    "        pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "        pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "      ",
+                                    "        pm.test('Body includes value held on href', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "        });",
+                                    "        pm.test('Body includes value held on id', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "        });",
+                                    "        // Individualized tests",
+                                    "        if (instance.id == pm.globals.get(\"IDTSR01\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFTSR01\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFTSR01');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDTSR01\"), function() {pm.expect(instance['id']) == pm.globals.get('IDTSR01');});",
+                                    "        }",
+                                    "        if (instance.id == pm.globals.get(\"IDTSR02\")) {",
+                                    "            pm.test('IDTSR02 not expected on this test', function () {",
+                                    "                console.log(\"Non expected resource, may happen if there is a collision on attributes\")",
+                                    "            });",
+                                    "        }",
+                                    "",
+                                    "        ",
+                                    "   ",
+                                    "}",
+                                    "  ",
+                                    "  "
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{Test_Result}}testSuiteResult?id={{IDTSR01}}",
+                            "host": [
+                                "{{Test_Result}}testSuiteResult"
+                            ],
+                            "query": [
+                                {
+                                    "key": "id",
+                                    "value": "{{IDTSR01}}"
+                                }
+                            ]
+                        },
+                        "description": "This operation filter a TestSuiteResult"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "E1",
+            "item": [
+                {
+                    "name": "/TestSuiteResult/404ID",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 404\", function () {",
+                                    "    pm.response.to.have.status(404);",
+                                    "});",
+                                    "",
+                                    "",
+                                    "postman.setNextRequest(null);"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{Test_Result}}TestSuiteResult/ace54d11-fcc8-43b7-a87d-d0c328cad03f",
+                            "host": [
+                                "{{Test_Result}}TestSuiteResult"
+                            ],
+                            "path": [
+                                "ace54d11-fcc8-43b7-a87d-d0c328cad03f"
+                            ]
+                        },
+                        "description": "This operation search for one of the created TestSuiteResult"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "N1",
+            "item": [
+                {
+                    "name": "Post NonFunctionalTestResult",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "",
+                                    "if (Array.isArray(jsonData)) { ",
+                                    "  ",
+                                    "    pm.test('Array not expected as response', function (){pm.expect.fail()});",
+                                    "  ",
+                                    "",
+                                    "}",
+                                    "",
+                                    "pm.test(\"Status code is 201\", function () {",
+                                    "  pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "var instance = pm.response.json();",
+                                    "var requiredAttributes = ['nonFunctionalTestResultDefinition', 'testExecution', 'href', 'id', 'nonFunctionalTestResultDefinition', 'testExecution'];",
+                                    "",
+                                    "pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "",
+                                    "",
+                                    "",
+                                    "pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "",
+                                    "pm.globals.set('HREFNFTR01', instance['href']);",
+                                    "pm.globals.set('IDNFTR01', instance['id']);",
+                                    "",
+                                    "pm.test('Body includes value held on href', function () {",
+                                    "  pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "});",
+                                    "pm.test('Body includes value held on id', function () {",
+                                    "  pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "});",
+                                    ""
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"nonFunctionalTestResultDefinition\": \"jbuzzwpeaw\",\n  \"testExecution\": {\n    \"TestEnvironmentProvisioningExecution\": {\n      \"id\": \"622815ac-5811-4cb6-b608-5b28d5d73a8d\",\n      \"href\": \"https://mycsp:8080/tmf-api/testExecution/v4/testEnvironmentProvisioningExecution/622815ac-5811-4cb6-b608-5b28d5d73a8d\",\n      \"dataCorrelationId\": \"29d7832e-9970-4af8-8d80-19444e1973ea\",\n      \"testEnvironmentAllocationExecution\": {\n        \"id\": \"418b253c-0cf3-4f48-b64e-93f8db9b614a\",\n        \"href\": \"https://mycsp:8080/tmf-api/testExecution/v4/testEnvironmentAllocationExecution/418b253c-0cf3-4f48-b64e-93f8db9b614a\",\n        \"dataCorrelationId\": \"156cf43a-fd6a-488e-a8dd-6b01ccef12cd\",\n        \"resourceManagerUrl\": \"https://myserver.com/resourceManager\",\n        \"testScenario\": {\n          \"id\": \"35776d4f-1851-435c-8573-802438f41e7a\",\n          \"href\": \"https://mycsp:8080/tmf-api/testScenario/v4/testScenario/35776d4f-1851-435c-8573-802438f41e7a\",\n          \"@referredType\": \"TestScenario\"\n        },\n        \"concreteResourceMapping\": [\n          {\n            \"abstractResource\": \"phone\",\n            \"concreteResources\": [\n              {\n                \"name\": \"iPhone_1289\"\n              }\n            ]\n          }\n        ],\n        \"state\": \"completed\",\n        \"@baseType\": \"Execution\",\n        \"@type\": \"TestEnvironmentAllocationExecution\"\n      },\n      \"state\": \"completed\",\n      \"@baseType\": \"Execution\",\n      \"@type\": \"TestEnvironmentProvisioningExecution\"\n    }\n  }\n}"
+                        },
+                        "url": {
+                            "raw": "{{Test_Result}}nonFunctionalTestResult",
+                            "host": [
+                                "{{Test_Result}}nonFunctionalTestResult"
+                            ]
+                        },
+                        "description": "This operation creates a NonFunctionalTestResult"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "/NonFunctionalTestResult",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "  ",
+                                    "  ",
+                                    "  ",
+                                    "var jsonData = pm.response.json();",
+                                    "  ",
+                                    "if (Array.isArray(jsonData) && (jsonData.length > 0)) {",
+                                    "    jsonData.forEach(function (instance, index) {",
+                                    "      ",
+                                    "        var requiredAttributes = ['nonFunctionalTestResultDefinition', 'testExecution', 'href', 'id', 'nonFunctionalTestResultDefinition', 'testExecution'];",
+                                    "      ",
+                                    "        pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "      ",
+                                    "      ",
+                                    "      ",
+                                    "        pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "        pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "      ",
+                                    "        pm.test('Body includes value held on href', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "        });",
+                                    "        pm.test('Body includes value held on id', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "        });",
+                                    "        // Individualized tests",
+                                    "        if (instance.id == pm.globals.get(\"IDNFTR01\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFNFTR01\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFNFTR01');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDNFTR01\"), function() {pm.expect(instance['id']) == pm.globals.get('IDNFTR01');});",
+                                    "        }",
+                                    "        if (instance.id == pm.globals.get(\"IDNFTR02\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFNFTR02\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFNFTR02');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDNFTR02\"), function() {pm.expect(instance['id']) == pm.globals.get('IDNFTR02');});",
+                                    "        }  ",
+                                    "    });",
+                                    "  }",
+                                    "  else {",
+                                    "    var instance = pm.response.json();",
+                                    "    var requiredAttributes = ['nonFunctionalTestResultDefinition', 'testExecution', 'href', 'id', 'nonFunctionalTestResultDefinition', 'testExecution'];",
+                                    "      ",
+                                    "        pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "      ",
+                                    "      ",
+                                    "      ",
+                                    "        pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "        pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "      ",
+                                    "        pm.test('Body includes value held on href', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "        });",
+                                    "        pm.test('Body includes value held on id', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "        });",
+                                    "        // Individualized tests",
+                                    "        if (instance.id == pm.globals.get(\"IDNFTR01\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFNFTR01\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFNFTR01');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDNFTR01\"), function() {pm.expect(instance['id']) == pm.globals.get('IDNFTR01');});",
+                                    "        }",
+                                    "        if (instance.id == pm.globals.get(\"IDNFTR02\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFNFTR02\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFNFTR02');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDNFTR02\"), function() {pm.expect(instance['id']) == pm.globals.get('IDNFTR02');});",
+                                    "        }",
+                                    "   ",
+                                    "  }",
+                                    "  ",
+                                    "  "
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{Test_Result}}nonFunctionalTestResult",
+                            "host": [
+                                "{{Test_Result}}nonFunctionalTestResult"
+                            ]
+                        },
+                        "description": "This operation search for the created NonFunctionalTestResult"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "/NonFunctionalTestResult/{{IDNFTR01}}",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "  ",
+                                    "  ",
+                                    "  ",
+                                    "var jsonData = pm.response.json();",
+                                    "  ",
+                                    "if (Array.isArray(jsonData) && (jsonData.length > 0)) {",
+                                    "    jsonData.forEach(function (instance, index) {",
+                                    "      ",
+                                    "        var requiredAttributes = ['nonFunctionalTestResultDefinition', 'testExecution', 'href', 'id', 'nonFunctionalTestResultDefinition', 'testExecution'];",
+                                    "      ",
+                                    "        pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "      ",
+                                    "      ",
+                                    "      ",
+                                    "        pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "        pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "      ",
+                                    "        pm.test('Body includes value held on href', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "        });",
+                                    "        pm.test('Body includes value held on id', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "        });",
+                                    "        // Individualized tests",
+                                    "        if (instance.id == pm.globals.get(\"IDNFTR01\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFNFTR01\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFNFTR01');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDNFTR01\"), function() {pm.expect(instance['id']) == pm.globals.get('IDNFTR01');});",
+                                    "        }",
+                                    "        if (instance.id == pm.globals.get(\"IDNFTR02\")) {",
+                                    "            pm.test('IDNFTR02 not expected on this test', function () {",
+                                    "                console.log(\"Non expected resource, may happen if there is a collision on attributes\")",
+                                    "            });",
+                                    "        }",
+                                    "          ",
+                                    "    });",
+                                    "  }",
+                                    "  else {",
+                                    "    var instance = pm.response.json();",
+                                    "    var requiredAttributes = ['nonFunctionalTestResultDefinition', 'testExecution', 'href', 'id', 'nonFunctionalTestResultDefinition', 'testExecution'];",
+                                    "      ",
+                                    "        pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "      ",
+                                    "      ",
+                                    "      ",
+                                    "        pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "        pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "      ",
+                                    "        pm.test('Body includes value held on href', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "        });",
+                                    "        pm.test('Body includes value held on id', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "        });",
+                                    "        // Individualized tests",
+                                    "        if (instance.id == pm.globals.get(\"IDNFTR01\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFNFTR01\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFNFTR01');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDNFTR01\"), function() {pm.expect(instance['id']) == pm.globals.get('IDNFTR01');});",
+                                    "        }",
+                                    "        if (instance.id == pm.globals.get(\"IDNFTR02\")) {",
+                                    "            pm.test('IDNFTR02 not expected on this test', function () {",
+                                    "                console.log(\"Non expected resource, may happen if there is a collision on attributes\")",
+                                    "            });",
+                                    "        }",
+                                    "",
+                                    "        ",
+                                    "   ",
+                                    "}",
+                                    "  ",
+                                    "  "
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{Test_Result}}nonFunctionalTestResult/{{IDNFTR01}}",
+                            "host": [
+                                "{{Test_Result}}nonFunctionalTestResult"
+                            ],
+                            "path": [
+                                "{{IDNFTR01}}"
+                            ]
+                        },
+                        "description": "This operation search for one of the created NonFunctionalTestResult"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "N2",
+            "item": [
+                {
+                    "name": "/NonFunctionalTestResult?fields=id",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "var jsonData = pm.response.json();",
+                                    "  ",
+                                    "if (Array.isArray(jsonData) && (jsonData.length > 0)) {",
+                                    "    jsonData.forEach(function (instance, index) {",
+                                    "      ",
+                                    "        var requiredAttributes = ['id','href', 'id'];",
+                                    "      ",
+                                    "        pm.test('Instance must have id, href and filtered attribute', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes)});",
+                                    "        pm.test('Instance has only id, href and filtered attribute', function () { pm.expect(requiredAttributes).to.include.members(Object.keys(instance))});",
+                                    "    });",
+                                    "",
+                                    "    ",
+                                    "}",
+                                    "else { ",
+                                    "  ",
+                                    "    pm.test('Array expected as response', function (){pm.expect.fail()});",
+                                    "  ",
+                                    "",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{Test_Result}}nonFunctionalTestResult?fields=id",
+                            "host": [
+                                "{{Test_Result}}nonFunctionalTestResult"
+                            ],
+                            "query": [
+                                {
+                                    "key": "fields",
+                                    "value": "id"
+                                }
+                            ]
+                        },
+                        "description": "This operation filter a NonFunctionalTestResult"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "/NonFunctionalTestResult?id={{IDNFTR01}}",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "  ",
+                                    "  ",
+                                    "  ",
+                                    "var jsonData = pm.response.json();",
+                                    "  ",
+                                    "if (Array.isArray(jsonData) && (jsonData.length > 0)) {",
+                                    "    jsonData.forEach(function (instance, index) {",
+                                    "      ",
+                                    "        var requiredAttributes = ['nonFunctionalTestResultDefinition', 'testExecution', 'href', 'id', 'nonFunctionalTestResultDefinition', 'testExecution'];",
+                                    "      ",
+                                    "        pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "      ",
+                                    "      ",
+                                    "      ",
+                                    "        pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "        pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "      ",
+                                    "        pm.test('Body includes value held on href', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "        });",
+                                    "        pm.test('Body includes value held on id', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "        });",
+                                    "        // Individualized tests",
+                                    "        if (instance.id == pm.globals.get(\"IDNFTR01\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFNFTR01\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFNFTR01');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDNFTR01\"), function() {pm.expect(instance['id']) == pm.globals.get('IDNFTR01');});",
+                                    "        }",
+                                    "        if (instance.id == pm.globals.get(\"IDNFTR02\")) {",
+                                    "            pm.test('IDNFTR02 not expected on this test', function () {",
+                                    "                console.log(\"Non expected resource, may happen if there is a collision on attributes\")",
+                                    "            });",
+                                    "        }",
+                                    "          ",
+                                    "    });",
+                                    "  }",
+                                    "  else {",
+                                    "    var instance = pm.response.json();",
+                                    "    var requiredAttributes = ['nonFunctionalTestResultDefinition', 'testExecution', 'href', 'id', 'nonFunctionalTestResultDefinition', 'testExecution'];",
+                                    "      ",
+                                    "        pm.test('Instance has all mandatory attributes', function () { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) });",
+                                    "      ",
+                                    "      ",
+                                    "      ",
+                                    "        pm.test('Response has href attribute', function() { pm.expect(instance[\"href\"]).to.be.a('string'); });",
+                                    "        pm.test('Response has id attribute', function() { pm.expect(instance[\"id\"]).to.be.a('string'); });",
+                                    "      ",
+                                    "        pm.test('Body includes value held on href', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['href']);",
+                                    "        });",
+                                    "        pm.test('Body includes value held on id', function () {",
+                                    "            pm.expect(pm.response.text()).to.include(instance['id']);",
+                                    "        });",
+                                    "        // Individualized tests",
+                                    "        if (instance.id == pm.globals.get(\"IDNFTR01\")) {",
+                                    "            pm.test('href is ' + pm.globals.get(\"HREFNFTR01\"), function() {pm.expect(instance['href']) == pm.globals.get('HREFNFTR01');});",
+                                    "            pm.test('id is ' + pm.globals.get(\"IDNFTR01\"), function() {pm.expect(instance['id']) == pm.globals.get('IDNFTR01');});",
+                                    "        }",
+                                    "        if (instance.id == pm.globals.get(\"IDNFTR02\")) {",
+                                    "            pm.test('IDNFTR02 not expected on this test', function () {",
+                                    "                console.log(\"Non expected resource, may happen if there is a collision on attributes\")",
+                                    "            });",
+                                    "        }",
+                                    "",
+                                    "        ",
+                                    "   ",
+                                    "}",
+                                    "  ",
+                                    "  "
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{Test_Result}}nonFunctionalTestResult?id={{IDNFTR01}}",
+                            "host": [
+                                "{{Test_Result}}nonFunctionalTestResult"
+                            ],
+                            "query": [
+                                {
+                                    "key": "id",
+                                    "value": "{{IDNFTR01}}"
+                                }
+                            ]
+                        },
+                        "description": "This operation filter a NonFunctionalTestResult"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "E1",
+            "item": [
+                {
+                    "name": "/NonFunctionalTestResult/404ID",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 404\", function () {",
+                                    "    pm.response.to.have.status(404);",
+                                    "});",
+                                    "",
+                                    "",
+                                    "postman.setNextRequest(null);"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{Test_Result}}NonFunctionalTestResult/e86992e8-adeb-4675-b0dc-88ef7dbc0e99",
+                            "host": [
+                                "{{Test_Result}}NonFunctionalTestResult"
+                            ],
+                            "path": [
+                                "e86992e8-adeb-4675-b0dc-88ef7dbc0e99"
+                            ]
+                        },
+                        "description": "This operation search for one of the created NonFunctionalTestResult"
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ]
+}
